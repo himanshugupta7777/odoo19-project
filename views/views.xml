@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+            <!-- list view -->
+<odoo>
+    <record id="view_my_module_list" model="ir.ui.view">
+        <field name="name">my_module.my_module.list</field>
+        <field name="model">my_module.my_module</field> 
+        <field name="arch" type="xml">
+            <list string="My Records" sample="1">
+                <field name="stu_name" string="Title"/>
+                <field name="branch"/>
+                <field name="roll_no"/>
+                <field name="gender"/> 
+                <field name="gpa"/>   
+                <field name="is_graduated" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_my_module_act" model="ir.actions.act_window">
+        <field name="name">My Model</field>
+        <field name="res_model">my_module.my_module</field> 
+        <field name="view_mode">kanban,calendar,graph,list,form</field>
+        <field name="view_id" ref="view_my_module_list"/>
+    </record>
+
+    <menuitem id="menu_my_module_root" 
+              name="Student" 
+              sequence="10"/>
+
+    <menuitem id="menu_my_module_list" 
+              name="Records" 
+              parent="menu_my_module_root" 
+              action="action_my_module_act" 
+              sequence="10"/>
+
+    <menuitem id="menu_my_module_submenu"
+                name="Drafts"
+                parent="menu_my_module_list"
+                action="action_my_module_act"
+                sequence="5"/>          
+ 
+                <!-- form view -->
+
+    <record id="view_my_module_form" model="ir.ui.view">
+    <field name="name">my_module.my_module.form</field>
+    <field name="model">my_module.my_module</field> 
+    <field name="arch" type="xml">
+        <form string="Student Details">
+            <sheet> 
+                <field name="student_image" widget="image" class="oe_avatar"/>
+                
+                <group>
+                    <group>
+                        <field name="stu_name" string="Name"/>
+                        <field name="branch" string="Branch"/>
+                        <field name="roll_no" string="Roll No"/>
+                        <field name="dob" string="Date of Birth"/>
+                    </group>
+                    <group>
+                        <field name="gender" string="Gender"/>
+                        <field name="gpa" string="GPA"/>
+                        <field name="is_graduated" string="Is Graduated"/>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <group>
+                                <field name="description" string="Description" placeholder="Enter student description here..."/></group>
+                        </page>
+                        <page string="Academic History Page">
+                        <group>
+                            <field name="previous_school" string="Previous School Details"/>
+                            <field name="admission_date" string="admission details"/>
+                            <field name="scholarship_details" string="scholarship details"/>
+                        </group>
+                        
+                        </page>
+                    
+                    </notebook>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+
+
+            <!-- Kanban View -->
+           <record id="view_my_module_kanban" model="ir.ui.view">
+    <field name="name">my_module.my_module.kanban</field>
+    <field name="model">my_module.my_module</field>
+    <field name="arch" type="xml">
+        <kanban>
+            <templates>
+                <t t-name="card">
+                    <div class="oe_kanban_global_click" style="position: relative; padding-right: 110px; min-height: 100px;">
+                        <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100px;">
+                            <field name="student_image" widget="image"/>
+                        </div>
+
+                        <!-- Details Container -->
+                        <div class="oe_kanban_details">
+                            <h1><field name="stu_name"/></h1>
+                            <div style="display: flex; justify-content: space-between;">
+                                <div>Branch: <field name="branch"/></div>
+                                <div><field name="dob"/></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <div>Roll No: <field name="roll_no"/></div>
+                                <div><field name="gender"/></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>
+
+            <!-- calendar view -->
+
+            <record id="view_my_module_calender" model="ir.ui.view">
+            <field name="name">my_module.my_module.calender</field>
+            <field name="model">my_module.my_module</field>
+            <field name="arch" type="xml">
+               <calendar string="Student Birthdays" date_start="dob" color="branch" mode="month">
+                <field name="stu_name"/>
+                <field name="branch"/>
+                <field name="roll_no"/>
+               </calendar> 
+            
+            </field>
+
+            </record>
+
+            <!-- graph view -->
+            <record id="view_my_module_graph" model="ir.ui.view">
+            <field name="name">my_module.my_module.graph</field>
+            <field name="model">my_module.my_module</field>
+            <field name="arch" type="xml">
+                 <graph string="Student Analysis" type="bar" sample="1">
+            <!-- Row field: This determines the X-axis (Grouping) -->
+            <field name="branch" type="row"/>
+            <!-- Measure field: This determines the Y-axis (Calculation) -->
+            <field name="roll_no" type="measure"/>
+            <field name="gpa" type="measure"/>
+        </graph>
+            </field>
+            
+            </record>
+</odoo>

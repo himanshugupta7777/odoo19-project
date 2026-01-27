@@ -1,0 +1,13 @@
+{
+    'name':'Odoo',
+    'version':'19.0.1.0.1',
+    'category':'sales',
+    'author':'Himanshu',
+    'depends':['base'],
+    'data':[
+        'security/ir.model.access.csv',
+        'views/views.xml',
+    ],
+    'installable':True,
+    'application':True,
+}
