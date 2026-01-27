@@ -6,6 +6,7 @@
         <field name="model">my_module.my_module</field> 
         <field name="arch" type="xml">
             <list string="My Records" sample="1">
+            <field name="reference_no"/>
                 <field name="stu_name" string="Title"/>
                 <field name="branch"/>
                 <field name="roll_no"/>
@@ -47,6 +48,12 @@
     <field name="arch" type="xml">
         <form string="Student Details">
             <sheet> 
+             <div class="oe_title">
+            <h1>
+            <field name="reference_no"/>
+                </h1>
+            </div>
+
                 <field name="student_image" widget="image" class="oe_avatar"/>
                 
                 <group>
@@ -93,12 +100,14 @@
             <templates>
                 <t t-name="card">
                     <div class="oe_kanban_global_click" style="position: relative; padding-right: 110px; min-height: 100px;">
-                        <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100px;">
+                        <div style="position: absolute; top: 0; right: 0; width: 80px; height: 80px;">
                             <field name="student_image" widget="image"/>
+                              <field name="reference_no"/>
                         </div>
 
                         <!-- Details Container -->
                         <div class="oe_kanban_details">
+
                             <h1><field name="stu_name"/></h1>
                             <div style="display: flex; justify-content: space-between;">
                                 <div>Branch: <field name="branch"/></div>
