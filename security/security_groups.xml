@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 1. Category (Remains the same) -->
+    <record id="module_category_student_details" model="ir.module.category">
+        <field name="name">Student Details Management</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <!-- 2. NEW: Define a Privilege to connect Category to Groups -->
+    <record id="privilege_student_management" model="res.groups.privilege">
+        <field name="name">Student Management Access</field>
+        <field name="category_id" ref="module_category_student_details"/>
+    </record>
+
+    <!-- 3. Student User Group (Use privilege_id) -->
+    <record id="group_my_module_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="privilege_id" ref="privilege_student_management"/>
+    </record>
+
+    <!-- 4. Student Manager Group (Use privilege_id) -->
+    <record id="group_my_module_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="privilege_id" ref="privilege_student_management"/>
+        <field name="implied_ids" eval="[(4, ref('group_my_module_user'))]"/>
+    </record>
+</odoo>

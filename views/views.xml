@@ -75,9 +75,9 @@
                         </page>
                         <page string="Academic History Page">
                         <group>
-                            <field name="previous_school" string="Previous School Details"/>
+                            <field name="previous_school" string="Previous School Details" groups="new_module.group_my_module_manager"/>
                             <field name="admission_date" string="admission details"/>
-                            <field name="scholarship_details" string="scholarship details"/>
+                            <field name="scholarship_details" string="scholarship details" groups="new_module.group_my_module_manager"/>
                         </group>
                         
                         </page>
@@ -102,13 +102,14 @@
                     <div class="oe_kanban_global_click" style="position: relative; padding-right: 110px; min-height: 100px;">
                         <div style="position: absolute; top: 0; right: 0; width: 80px; height: 80px;">
                             <field name="student_image" widget="image"/>
-                              <field name="reference_no"/>
                         </div>
 
                         <!-- Details Container -->
                         <div class="oe_kanban_details">
 
-                            <h1><field name="stu_name"/></h1>
+                            <h1><field name="stu_name"/>
+                            </h1>
+                            <h3><field name="reference_no"/></h3>
                             <div style="display: flex; justify-content: space-between;">
                                 <div>Branch: <field name="branch"/></div>
                                 <div><field name="dob"/></div>
@@ -144,17 +145,17 @@
 
             <!-- graph view -->
             <record id="view_my_module_graph" model="ir.ui.view">
-            <field name="name">my_module.my_module.graph</field>
-            <field name="model">my_module.my_module</field>
-            <field name="arch" type="xml">
-                 <graph string="Student Analysis" type="bar" sample="1">
-            <!-- Row field: This determines the X-axis (Grouping) -->
-            <field name="branch" type="row"/>
-            <!-- Measure field: This determines the Y-axis (Calculation) -->
-            <field name="roll_no" type="measure"/>
-            <field name="gpa" type="measure"/>
-        </graph>
-            </field>
-            
-            </record>
+                    <field name="name">my_module.my_module.graph</field>
+                    <field name="model">my_module.my_module</field>
+                    <field name="arch" type="xml">
+                        <graph string="Student Analysis" type="bar" sample="1">
+                        <!-- Row field: This determines the X-axis (Grouping) -->
+                        <field name="branch" type="row"/>
+                        <!-- Measure field: This determines the Y-axis (Calculation) -->
+                        <field name="roll_no" type="measure"/>
+                        <field name="gpa" type="measure"/>
+                        </graph>
+                    </field>
+                    
+                            </record>
 </odoo>
