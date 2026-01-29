@@ -23,7 +23,11 @@ class MyModule(models.Model):
     previous_school=fields.Char(string="Previous School Details")
     admission_date=fields.Date(string="admission date")
     scholarship_details=fields.Char(string="scholarship details")
-
+    user_id = fields.Many2one(
+    'res.users',
+    string="Related User",
+    default=lambda self: self.env.user
+) #for record rules
 
 
 

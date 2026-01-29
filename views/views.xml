@@ -81,7 +81,6 @@
                         </group>
                         
                         </page>
-                    
                     </notebook>
                 </group>
             </sheet>
@@ -92,70 +91,70 @@
 
 
             <!-- Kanban View -->
-           <record id="view_my_module_kanban" model="ir.ui.view">
-    <field name="name">my_module.my_module.kanban</field>
-    <field name="model">my_module.my_module</field>
-    <field name="arch" type="xml">
-        <kanban>
-            <templates>
-                <t t-name="card">
-                    <div class="oe_kanban_global_click" style="position: relative; padding-right: 110px; min-height: 100px;">
-                        <div style="position: absolute; top: 0; right: 0; width: 80px; height: 80px;">
-                            <field name="student_image" widget="image"/>
-                        </div>
-
-                        <!-- Details Container -->
-                        <div class="oe_kanban_details">
-
-                            <h1><field name="stu_name"/>
-                            </h1>
-                            <h3><field name="reference_no"/></h3>
-                            <div style="display: flex; justify-content: space-between;">
-                                <div>Branch: <field name="branch"/></div>
-                                <div><field name="dob"/></div>
+    <record id="view_my_module_kanban" model="ir.ui.view">
+        <field name="name">my_module.my_module.kanban</field>
+        <field name="model">my_module.my_module</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click" style="position: relative; padding-right: 110px; min-height: 100px;">
+                            <div style="position: absolute; top: 0; right: 0; width: 80px; height: 80px;">
+                                <field name="student_image" widget="image"/>
                             </div>
-                            <div style="display: flex; justify-content: space-between;">
-                                <div>Roll No: <field name="roll_no"/></div>
-                                <div><field name="gender"/></div>
+
+                            <!-- Details Container -->
+                            <div class="oe_kanban_details">
+
+                                <h1><field name="stu_name"/>
+                                </h1>
+                                <h3><field name="reference_no"/></h3>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <div>Branch: <field name="branch"/></div>
+                                    <div><field name="dob"/></div>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <div>Roll No: <field name="roll_no"/></div>
+                                    <div><field name="gender"/></div>
+                                </div>
                             </div>
+
                         </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
 
-                    </div>
-                </t>
-            </templates>
-        </kanban>
-    </field>
-</record>
+                <!-- calendar view -->
 
-            <!-- calendar view -->
+                <record id="view_my_module_calender" model="ir.ui.view">
+                <field name="name">my_module.my_module.calender</field>
+                <field name="model">my_module.my_module</field>
+                <field name="arch" type="xml">
+                <calendar string="Student Birthdays" date_start="dob" color="branch" mode="month">
+                    <field name="stu_name"/>
+                    <field name="branch"/>
+                    <field name="roll_no"/>
+                </calendar> 
+                
+                </field>
 
-            <record id="view_my_module_calender" model="ir.ui.view">
-            <field name="name">my_module.my_module.calender</field>
-            <field name="model">my_module.my_module</field>
-            <field name="arch" type="xml">
-               <calendar string="Student Birthdays" date_start="dob" color="branch" mode="month">
-                <field name="stu_name"/>
-                <field name="branch"/>
-                <field name="roll_no"/>
-               </calendar> 
-            
-            </field>
+                </record>
 
-            </record>
-
-            <!-- graph view -->
-            <record id="view_my_module_graph" model="ir.ui.view">
-                    <field name="name">my_module.my_module.graph</field>
-                    <field name="model">my_module.my_module</field>
-                    <field name="arch" type="xml">
-                        <graph string="Student Analysis" type="bar" sample="1">
-                        <!-- Row field: This determines the X-axis (Grouping) -->
-                        <field name="branch" type="row"/>
-                        <!-- Measure field: This determines the Y-axis (Calculation) -->
-                        <field name="roll_no" type="measure"/>
-                        <field name="gpa" type="measure"/>
-                        </graph>
-                    </field>
-                    
-                            </record>
+                <!-- graph view -->
+                <record id="view_my_module_graph" model="ir.ui.view">
+                        <field name="name">my_module.my_module.graph</field>
+                        <field name="model">my_module.my_module</field>
+                        <field name="arch" type="xml">
+                            <graph string="Student Analysis" type="bar" sample="1">
+                            <!-- Row field: This determines the X-axis (Grouping) -->
+                            <field name="branch" type="row"/>
+                            <!-- Measure field: This determines the Y-axis (Calculation) -->
+                            <field name="roll_no" type="measure"/>
+                            <field name="gpa" type="measure"/>
+                            </graph>
+                        </field>
+                        
+                                </record>
 </odoo>
