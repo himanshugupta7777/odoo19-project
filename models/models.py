@@ -25,9 +25,7 @@ class MyModule(models.Model):
     scholarship_details=fields.Char(string="scholarship details")
     user_id = fields.Many2one(
     'res.users',
-    string="Related User",
-    default=lambda self: self.env.user
-) #for record rules
+    default=lambda self: self.env.user) 
 
 
 

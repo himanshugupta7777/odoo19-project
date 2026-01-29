@@ -11,12 +11,6 @@
         <field name="name">Student Management Access</field>
         <field name="category_id" ref="module_category_student_details"/>
     </record>
-
-    
-     <record id="privilege_student_extra_feature" model="res.groups.privilege">
-        <field name="name">Special Permissions</field>
-        <field name="category_id" ref="module_category_student_details"/>
-    </record>
                                                                                                                                                                                                                                                                                                                      
     <!-- 3. Student User Group (Use privilege_id) -->
     <record id="group_my_module_user" model="res.groups">
