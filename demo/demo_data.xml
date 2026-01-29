@@ -1,0 +1,23 @@
+<odoo>
+    <record id="demo_student_1" model="my_module.my_module">
+        <field name="stu_name">Demo 1</field>
+        <field name="branch">CSE</field>
+        <field name="roll_no">901</field>
+        <field name="dob">2003-01-01 00:00:00</field>
+        <field name="gender">male</field>
+        <field name="gpa">8.4</field>
+        <field name="is_graduated">False</field>
+        <field name="category_id" ref="new_module.category_general"/>
+    </record>
+
+    <record id="demo_student_2" model="my_module.my_module">
+        <field name="stu_name">Demo 2</field>
+        <field name="branch">IT</field>
+        <field name="roll_no">902</field>
+        <field name="dob">2004-02-10 00:00:00</field>
+        <field name="gender">female</field>
+        <field name="gpa">7.2</field>
+        <field name="is_graduated">True</field>
+        <field name="category_id" ref="new_module.category_obc"/>
+    </record>
+</odoo>

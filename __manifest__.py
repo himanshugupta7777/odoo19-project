@@ -8,8 +8,12 @@
         'security/security_groups.xml',
         'security/ir.model.access.csv',
         'security/record_rules.xml',
+        'data/my_module.my_module.csv',
+        'data/student_category.xml',
+        'demo/demo_data.xml',
         'views/views.xml',
         'views/templates.xml',
+        
     ],
     'installable':True,
     'application':True,

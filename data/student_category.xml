@@ -1,0 +1,17 @@
+<odoo>
+    <record id="category_general" model="student.category">
+        <field name="name">General</field>
+    </record>
+
+    <record id="category_obc" model="student.category">
+        <field name="name">OBC</field>
+    </record>
+
+    <record id="category_sc" model="student.category">
+        <field name="name">SC</field>
+    </record>
+
+    <record id="category_st" model="student.category">
+        <field name="name">ST</field>
+    </record>
+</odoo>

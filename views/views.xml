@@ -55,6 +55,8 @@
             </div>
 
                 <field name="student_image" widget="image" class="oe_avatar"/>
+                <field name="category_id"/>
+                <field name="id"/>
                 
                 <group>
                     <group>
