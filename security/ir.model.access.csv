@@ -1,4 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_my_module_user,my_module.user,model_my_module_my_module,new_module.group_my_module_user,1,1,0,0
-access_my_module_manager,my_module.manager,model_my_module_my_module,new_module.group_my_module_manager,1,1,1,1
+access_student_info_user,student.info.user,model_student_info,,1,1,0,0
+access_student_info_manager,student.info.manager,model_student_info,,1,1,1,1
 access_student_category_manager,student.category,model_student_category,,1,1,1,1
+access_student_subject_manager,student.subject,model_student_subject,,1,1,1,1
+access_student_skill_manager,student.skill,model_student_skill,,1,1,1,1

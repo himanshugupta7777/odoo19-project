@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-            <!-- list view -->
 <odoo>
-    <record id="view_my_module_list" model="ir.ui.view">
-        <field name="name">my_module.my_module.list</field>
-        <field name="model">my_module.my_module</field> 
+    <!-- List View -->
+    <record id="view_student_info_list" model="ir.ui.view">
+        <field name="name">student.info.list</field>
+        <field name="model">student.info</field> 
         <field name="arch" type="xml">
-            <list string="My Records" sample="1">
-            <field name="reference_no"/>
-                <field name="stu_name" string="Title"/>
+            <list string="Student Records" sample="1">
+                <field name="reference_no"/>
+                <field name="stu_name" string="Name"/>
                 <field name="branch"/>
                 <field name="roll_no"/>
                 <field name="gender"/> 
@@ -17,85 +17,56 @@
         </field>
     </record>
 
-    <record id="action_my_module_act" model="ir.actions.act_window">
-        <field name="name">My Model</field>
-        <field name="res_model">my_module.my_module</field> 
-        <field name="view_mode">kanban,calendar,graph,list,form</field>
-        <field name="view_id" ref="view_my_module_list"/>
-    </record>
-
-    <menuitem id="menu_my_module_root" 
-              name="Student" 
-              sequence="10"/>
-
-    <menuitem id="menu_my_module_list" 
-              name="Records" 
-              parent="menu_my_module_root" 
-              action="action_my_module_act" 
-              sequence="10"/>
-
-    <menuitem id="menu_my_module_submenu"
-                name="Drafts"
-                parent="menu_my_module_list"
-                action="action_my_module_act"
-                sequence="5"/>          
- 
-                <!-- form view -->
-
-    <record id="view_my_module_form" model="ir.ui.view">
-    <field name="name">my_module.my_module.form</field>
-    <field name="model">my_module.my_module</field> 
-    <field name="arch" type="xml">
-        <form string="Student Details">
-            <sheet> 
-             <div class="oe_title">
-            <h1>
-            <field name="reference_no"/>
-                </h1>
-            </div>
-
-                <field name="student_image" widget="image" class="oe_avatar"/>
-                <field name="category_id"/>
-                <field name="id"/>
-                
-                <group>
+    <!-- Form View -->
+    <record id="view_student_info_form" model="ir.ui.view">
+        <field name="name">student.info.form</field>
+        <field name="model">student.info</field> 
+        <field name="arch" type="xml">
+            <form string="Student Details">
+                <sheet> 
+                    <div class="oe_title">
+                        <h1><field name="reference_no"/></h1>
+                    </div>
+                    <field name="student_image" widget="image" class="oe_avatar"/>
                     <group>
-                        <field name="stu_name" string="Name"/>
-                        <field name="branch" string="Branch"/>
-                        <field name="roll_no" string="Roll No"/>
-                        <field name="dob" string="Date of Birth"/>
-                    </group>
-                    <group>
-                        <field name="gender" string="Gender"/>
-                        <field name="gpa" string="GPA"/>
-                        <field name="is_graduated" string="Is Graduated"/>
+                        <group>
+                            <field name="stu_name"/>
+                            <field name="category_id"/>
+                            <field name="branch"/>
+                            <field name="roll_no"/>
+                            <field name="dob"/>
+                        </group>
+                        <group>
+                            <field name="gender"/>
+                            <field name="gpa"/>
+                            <field name="is_graduated"/>
+                        </group>
                     </group>
                     <notebook>
                         <page string="Notes">
                             <group>
-                                <field name="description" string="Description" placeholder="Enter student description here..."/></group>
+                                <field name="description" placeholder="Enter student description here..."/>
+                            </group>
                         </page>
-                        <page string="Academic History Page">
-                        <group>
-                            <field name="previous_school" string="Previous School Details" groups="new_module.group_my_module_manager"/>
-                            <field name="admission_date" string="admission details"/>
-                            <field name="scholarship_details" string="scholarship details" groups="new_module.group_my_module_manager"/>
-                        </group>
-                        
+                        <page string="Academic History">
+                            <group>
+                                <field name="previous_school" groups="new_module.group_my_module_manager"/>
+                                <field name="admission_date"/>
+                                <field name="scholarship_details" groups="new_module.group_my_module_manager"/>
+                                <field name="subject_ids"/>
+                                <field name="skills_ids" widget="many2many_tags"/>
+                            </group>
                         </page>
                     </notebook>
-                </group>
-            </sheet>
-        </form>
-    </field>
-</record>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
-
-
-            <!-- Kanban View -->
-    <record id="view_my_module_kanban" model="ir.ui.view">
-        <field name="name">my_module.my_module.kanban</field>
-        <field name="model">my_module.my_module</field>
+    <!-- Kanban View -->
+    <record id="view_student_info_kanban" model="ir.ui.view">
+        <field name="name">student.info.kanban</field>
+        <field name="model">student.info</field>
         <field name="arch" type="xml">
             <kanban>
                 <templates>
@@ -104,23 +75,12 @@
                             <div style="position: absolute; top: 0; right: 0; width: 80px; height: 80px;">
                                 <field name="student_image" widget="image"/>
                             </div>
-
-                            <!-- Details Container -->
                             <div class="oe_kanban_details">
-
-                                <h1><field name="stu_name"/>
-                                </h1>
-                                <h3><field name="reference_no"/></h3>
-                                <div style="display: flex; justify-content: space-between;">
-                                    <div>Branch: <field name="branch"/></div>
-                                    <div><field name="dob"/></div>
-                                </div>
-                                <div style="display: flex; justify-content: space-between;">
-                                    <div>Roll No: <field name="roll_no"/></div>
-                                    <div><field name="gender"/></div>
-                                </div>
+                                <strong><field name="stu_name"/></strong>
+                                <div><field name="reference_no"/></div>
+                                <div>Branch: <field name="branch"/></div>
+                                <div>Roll No: <field name="roll_no"/></div>
                             </div>
-
                         </div>
                     </t>
                 </templates>
@@ -128,35 +88,42 @@
         </field>
     </record>
 
-                <!-- calendar view -->
+    <!-- Calendar View -->
+    <record id="view_student_info_calendar" model="ir.ui.view">
+        <field name="name">student.info.calendar</field>
+        <field name="model">student.info</field>
+        <field name="arch" type="xml">
+            <calendar string="Student Birthdays" date_start="dob" color="branch" mode="month">
+                <field name="stu_name"/>
+                <field name="branch"/>
+            </calendar> 
+        </field>
+    </record>
 
-                <record id="view_my_module_calender" model="ir.ui.view">
-                <field name="name">my_module.my_module.calender</field>
-                <field name="model">my_module.my_module</field>
-                <field name="arch" type="xml">
-                <calendar string="Student Birthdays" date_start="dob" color="branch" mode="month">
-                    <field name="stu_name"/>
-                    <field name="branch"/>
-                    <field name="roll_no"/>
-                </calendar> 
-                
-                </field>
+    <!-- Graph View -->
+    <record id="view_student_info_graph" model="ir.ui.view">
+        <field name="name">student.info.graph</field>
+        <field name="model">student.info</field>
+        <field name="arch" type="xml">
+            <graph string="Student Analysis" type="bar" sample="1">
+                <field name="branch" type="row"/>
+                <field name="gpa" type="measure"/>
+            </graph>
+        </field>
+    </record>
 
-                </record>
+    <!-- Window Action -->
+    <record id="action_student_info" model="ir.actions.act_window">
+        <field name="name">Students</field>
+        <field name="res_model">student.info</field> 
+        <field name="view_mode">kanban,list,form,calendar,graph</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first student record!</p>
+        </field>
+    </record>
 
-                <!-- graph view -->
-                <record id="view_my_module_graph" model="ir.ui.view">
-                        <field name="name">my_module.my_module.graph</field>
-                        <field name="model">my_module.my_module</field>
-                        <field name="arch" type="xml">
-                            <graph string="Student Analysis" type="bar" sample="1">
-                            <!-- Row field: This determines the X-axis (Grouping) -->
-                            <field name="branch" type="row"/>
-                            <!-- Measure field: This determines the Y-axis (Calculation) -->
-                            <field name="roll_no" type="measure"/>
-                            <field name="gpa" type="measure"/>
-                            </graph>
-                        </field>
-                        
-                                </record>
+    <!-- Menu Items -->
+    <menuitem id="menu_student_root" name="Student Management" sequence="10"/>
+    <menuitem id="menu_student_records" name="Records" parent="menu_student_root" action="action_student_info" sequence="10"/>
+    <menuitem id="menu_student_drafts" name="Drafts" parent="menu_student_records" action="action_student_info" sequence="5"/>
 </odoo>

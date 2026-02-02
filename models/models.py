@@ -1,7 +1,10 @@
 from odoo import fields,models,api, _
+import logging
+_logger=logging.getLogger(__name__)
+from odoo.exceptions import UserError
 
 class MyModule(models.Model):
-    _name = 'my_module.my_module'
+    _name = 'student.info'
     _description = 'Description'
     _rec_name='reference_no'
     reference_no = fields.Char(string="Student ID", required=True, copy=False, 
@@ -28,14 +31,21 @@ class MyModule(models.Model):
     default=lambda self: self.env.user)  #for record rules
 
     category_id = fields.Many2one(
-    'student.category',
-    string="Category",
+    'student.category',   #targeted model name
+    string="Categories",
 
 )    #for student_category model
 
+    subject_ids=fields.One2many(
+        'student.subject',
+        'student_id',
+        string="Subjects"
+    )
 
-
-
+    skills_ids=fields.Many2many(
+        'student.skill',
+        string="Skills"
+    )
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
@@ -44,5 +54,34 @@ class MyModule(models.Model):
         return super(MyModule, self).create(vals_list)
 
 
+    def copy(self, default=None):
+        default = dict(default or {})
+        default['gpa'] = 0.0
+        default['roll_no']= 0
+        return super().copy(default)
 
-    
+    def read(self,fields=None,load='_classic_read'):
+        _logger.info("Read method called")
+        return super().read(fields,load)
+
+
+    def write(self, vals):
+        if self.env.context.get('install_mode'):
+            return super().write(vals)
+
+        for rec in self:
+            if rec.is_graduated and 'gpa' in vals:
+                raise UserError("Graduated student GPA can't be updated")
+            if 'roll_no' in vals and vals.get('roll_no', 0) < 0:
+                raise UserError("Roll number can't be negative")
+
+        return super().write(vals)
+
+    def unlink(self):
+        if self.env.context.get('install_mode'):
+            return super(MyModule, self).unlink()
+
+        for rec in self:
+            if rec.is_graduated:
+                raise UserError("Graduated student can't be deleted")
+        return super(MyModule, self).unlink()

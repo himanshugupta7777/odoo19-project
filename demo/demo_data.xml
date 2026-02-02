@@ -1,5 +1,5 @@
 <odoo>
-    <record id="demo_student_1" model="my_module.my_module">
+    <record id="demo_student_1" model="student.info">
         <field name="stu_name">Demo 1</field>
         <field name="branch">CSE</field>
         <field name="roll_no">901</field>
@@ -10,7 +10,7 @@
         <field name="category_id" ref="new_module.category_general"/>
     </record>
 
-    <record id="demo_student_2" model="my_module.my_module">
+    <record id="demo_student_2" model="student.info">
         <field name="stu_name">Demo 2</field>
         <field name="branch">IT</field>
         <field name="roll_no">902</field>

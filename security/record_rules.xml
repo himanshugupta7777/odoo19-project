@@ -1,17 +1,17 @@
 <odoo>
 
-    
-    <record id="rule_my_module_user_own" model="ir.rule">
-        <field name="name">User Module</field>
-        <field name="model_id" ref="model_my_module_my_module"/>
+    <!-- Rule for Users: Can only see their own records -->
+    <record id="rule_student_info_user_own" model="ir.rule">
+        <field name="name">Personal Student Records</field>
+        <field name="model_id" ref="model_student_info"/> <!-- Updated -->
         <field name="domain_force">[('user_id', '=', user.id)]</field>
-        <field name="groups" eval="[(4, ref('new_module.group_my_module_user'))]"/>       <!-- foldername.group_groupname !-->    
+        <field name="groups" eval="[(4, ref('new_module.group_my_module_user'))]"/>       
     </record>
 
-
-    <record id="rule_my_module_manager_all" model="ir.rule">
-        <field name="name">Manager Module</field>
-        <field name="model_id" ref="model_my_module_my_module"/>
+    <!-- Rule for Managers: Can see everything -->
+    <record id="rule_student_info_manager_all" model="ir.rule">
+        <field name="name">All Student Records (Manager)</field>
+        <field name="model_id" ref="model_student_info"/> <!-- Updated -->
         <field name="domain_force">[(1,'=',1)]</field>
         <field name="groups" eval="[(4, ref('new_module.group_my_module_manager'))]"/>
     </record>
