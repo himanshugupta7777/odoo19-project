@@ -1,7 +1,7 @@
 from odoo import fields,models,api, _
 import logging
 _logger=logging.getLogger(__name__)
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError,ValidationError
 
 class MyModule(models.Model):
     _name = 'student.info'
@@ -17,6 +17,7 @@ class MyModule(models.Model):
     is_graduated = fields.Boolean(string="Graduated?")
     gpa = fields.Float( digits=(12, 2))
     student_image=fields.Binary(string="Student Photo")
+    grade = fields.Char(string="Grade", compute="_compute_grade", store=True)
     gender = fields.Selection([
         ('male', 'Male'),
         ('female', 'Female'),
@@ -54,6 +55,57 @@ class MyModule(models.Model):
         return super(MyModule, self).create(vals_list)
 
 
+
+    @api.constrains('roll_no')
+    def _check_roll_no(self):
+        for rec in self:
+            if rec.roll_no < 0:
+                raise ValidationError(_("Roll number cannot be negative!"))
+
+    @api.constrains('gpa')
+    def _check_gpa(self):
+        for rec in self:
+            if rec.gpa<=0:
+                raise ValidationError(_("Gpa can't be negative!"))            
+
+    @api.constrains('dob')
+    def _check_birth_date(self):
+        """ Prevent future birth dates """
+        for rec in self:
+            if rec.dob and rec.dob > fields.Datetime.now():
+                raise ValidationError(_("The Date of Birth cannot be in the future!"))
+
+
+    @api.ondelete(at_uninstall=False)
+    def _prevent_delete_graduated(self):
+        raise UserError("OnDelete Hit")
+        _logger.info("OnDelete method called")
+        """ Prevent deleting students who have already graduated """
+        for rec in self:
+            if rec.is_graduated:
+                raise UserError(_("You cannot delete a student record once they have graduated!"))
+
+
+    @api.depends('gpa')
+    def _compute_grade(self):
+        """ Automatically calculate Grade whenever GPA changes """
+        for rec in self:
+            if rec.gpa >= 3.5:
+                rec.grade = 'Excellent'
+            elif rec.gpa >= 2.0:
+                rec.grade = 'Average'
+            else:
+                rec.grade = 'Below Average' 
+
+    @api.onchange('stu_name', 'branch')
+    def _onchange_student_details(self):
+        """ Suggest a description live as the user types """
+        if self.stu_name and self.branch:
+            # This updates the screen immediately
+            self.description = _("Student %s is enrolled in the %s branch.") % (self.stu_name, self.branch)
+                       
+            
+
     def copy(self, default=None):
         default = dict(default or {})
         default['gpa'] = 0.0
@@ -72,16 +124,11 @@ class MyModule(models.Model):
         for rec in self:
             if rec.is_graduated and 'gpa' in vals:
                 raise UserError("Graduated student GPA can't be updated")
-            if 'roll_no' in vals and vals.get('roll_no', 0) < 0:
-                raise UserError("Roll number can't be negative")
 
         return super().write(vals)
 
     def unlink(self):
         if self.env.context.get('install_mode'):
             return super(MyModule, self).unlink()
-
-        for rec in self:
-            if rec.is_graduated:
-                raise UserError("Graduated student can't be deleted")
+        
         return super(MyModule, self).unlink()

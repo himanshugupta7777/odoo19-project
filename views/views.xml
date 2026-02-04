@@ -39,6 +39,7 @@
                         <group>
                             <field name="gender"/>
                             <field name="gpa"/>
+                            <field name="grade"/>
                             <field name="is_graduated"/>
                         </group>
                     </group>
