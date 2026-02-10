@@ -1,0 +1,45 @@
+<odoo>
+    <record id="email_template_student_birthday" model="mail.template">
+        <field name="name">Student Birthday Wish</field>
+        <field name="model_id" ref="model_student_info"/>
+        <field name="subject"> Maa'm{{object.stu_name}}</field>
+        <field name="email_from">noreply@mycompany.com</field>
+        <field name="email_to">{{object.email}}</field>
+        <field name="body_html" type="html">
+           <div style="font-family: Arial, sans-serif;font-size:14px; color : #000000;">
+           <p>Dear
+                <strong>
+                    <t t-out="object.stu_name"/>
+                </strong>
+           </p>
+           <div class="task-completed-wrapper" style="
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: #000000;
+    border-radius: 12px;
+">
+    <h1 style="
+        font-size: 3.2rem;
+        font-weight: 900;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        text-align: center;
+        margin: 40px 0;
+        background: linear-gradient(90deg, #00c6ff, #0072ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 
+            0 0 10px rgba(0, 114, 255, 0.6),
+            0 0 20px rgba(0, 198, 255, 0.4);
+    ">
+        TASK COMPLETED
+    </h1>
+</div>
+
+
+           </div>
+        </field>
+    </record>
+</odoo>

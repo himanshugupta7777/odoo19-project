@@ -1,6 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_student_info_user,student.info.user,model_student_info,,1,1,0,0
-access_student_info_manager,student.info.manager,model_student_info,,1,1,1,1
-access_student_category_manager,student.category,model_student_category,,1,1,1,1
-access_student_subject_manager,student.subject,model_student_subject,,1,1,1,1
-access_student_skill_manager,student.skill,model_student_skill,,1,1,1,1
+access_student_info_user,student.info.user,model_student_info,base.group_user,1,1,0,0
+access_student_info_manager,student.info.manager,model_student_info,base.group_system,1,1,1,1
+access_student_category_manager,student.category,model_student_category,base.group_user,1,1,1,1
+access_student_subject_manager,student.subject,model_student_subject,base.group_user,1,1,1,1
+access_student_skill_manager,student.skill,model_student_skill,base.group_user,1,1,1,1
+access_update_branch_wizard,update.branch.wizard,model_update_branch_wizard,base.group_user,1,1,1,1

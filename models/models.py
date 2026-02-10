@@ -2,10 +2,42 @@ from odoo import fields,models,api, _
 import logging
 _logger=logging.getLogger(__name__)
 from odoo.exceptions import UserError,ValidationError
+from datetime import date,timedelta
+import time
+
+
+class StudentBase(models.AbstractModel):
+    _name = 'student.base'
+    _description = 'Shared Person Logic'
+
+    dob = fields.Datetime(string="Date and time of birth", required=True)
+    birthday_this_year = fields.Date(
+        string="Birthday(This Year)",
+        compute="_compute_birthday_this_year",
+        store=True
+    )
+
+    @api.constrains('dob')
+    def _check_birth_date(self):
+        for rec in self:
+            if rec.dob and rec.dob > fields.Datetime.now():
+                raise ValidationError(_("The Date of Birth cannot be in the future!"))
+
+    @api.depends('dob')
+    def _compute_birthday_this_year(self):
+        today = date.today()
+        for rec in self:
+            if rec.dob:
+                rec.birthday_this_year = rec.dob.date().replace(year=today.year)
+            else:
+                rec.birthday_this_year = False
+
+
 
 class MyModule(models.Model):
     _name = 'student.info'
-    _description = 'Description'
+    _description = 'Student Info'
+    _inherit = ['mail.thread', 'mail.activity.mixin','student.base']
     _rec_name='reference_no'
     reference_no = fields.Char(string="Student ID", required=True, copy=False, 
     readonly=True, default=lambda self: _('New'))
@@ -13,11 +45,12 @@ class MyModule(models.Model):
     branch = fields.Char(string="Branch")
     roll_no = fields.Integer(string="Roll No")
     description=fields.Text(string="Description")
-    dob = fields.Datetime(string="Date and time of birth", required=True)
+    # dob = fields.Datetime(string="Date and time of birth", required=True)
     is_graduated = fields.Boolean(string="Graduated?")
     gpa = fields.Float( digits=(12, 2))
+    _order='gpa asc'
     student_image=fields.Binary(string="Student Photo")
-    grade = fields.Char(string="Grade", compute="_compute_grade", store=True)
+    grade = fields.Char(string="Grade",store=True)
     gender = fields.Selection([
         ('male', 'Male'),
         ('female', 'Female'),
@@ -25,8 +58,20 @@ class MyModule(models.Model):
     ], string="Gender", default='male')
     
     previous_school=fields.Char(string="Previous School Details")
+    active = fields.Boolean(default=True) 
     admission_date=fields.Date(string="admission date")
     scholarship_details=fields.Char(string="scholarship details")
+    # birthday_this_year=fields.Date(
+    #     string="Birthday(This Year)",
+    #     compute="_compute_birthday_this_year",
+    #     store=True
+    # )
+    email=fields.Char(string="Student Email")
+    _unique_email=models.Constraint(
+        'UNIQUE(email)',
+        'This email is already registered!'
+    )
+
     user_id = fields.Many2one(
     'res.users',
     default=lambda self: self.env.user)  #for record rules
@@ -46,6 +91,13 @@ class MyModule(models.Model):
     skills_ids=fields.Many2many(
         'student.skill',
         string="Skills"
+    )
+    message_ids = fields.One2many(
+    'mail.message',
+    'res_id',
+    domain=lambda self: [('model', '=', self._name)],
+    string='Messages',
+    readonly=True
     )
     @api.model_create_multi
     def create(self, vals_list):
@@ -68,17 +120,60 @@ class MyModule(models.Model):
             if rec.gpa<=0:
                 raise ValidationError(_("Gpa can't be negative!"))            
 
-    @api.constrains('dob')
-    def _check_birth_date(self):
-        """ Prevent future birth dates """
-        for rec in self:
-            if rec.dob and rec.dob > fields.Datetime.now():
-                raise ValidationError(_("The Date of Birth cannot be in the future!"))
+    # @api.constrains('dob')
+    # def _check_birth_date(self):
+    #     """ Prevent future birth dates """
+    #     for rec in self:
+    #         if rec.dob and rec.dob > fields.Datetime.now():
+    #             raise ValidationError(_("The Date of Birth cannot be in the future!"))
+
+    # @api.depends('dob')
+    # def _compute_birthday_this_year(self):
+    #     today=date.today()
+    #     for rec in self:
+    #         if rec.dob:
+    #             rec.birthday_this_year=rec.dob.date().replace(year=today.year)
+    #         else:
+    #             rec.birthday_this_year=False   
+
+
+
+    def _cron_send_birthday_emails(self):
+           today=date.today()
+
+           students=self.search([
+            ('birthday_this_year','>=',today),
+            ('birthday_this_year','<',today+timedelta(days=1)),
+            ('email','!=',False),
+           ])
+
+           template=self.env.ref(
+            'new_module.email_template_student_birthday',
+            raise_if_not_found=False
+           )
+           for student in students:
+                if template:
+                    template.send_mail(student.id,force_send=True)
+                            #cron job method    
+
+
+
+
+    
+    def cron_first_task(self):
+        _logger.info("ODOO19 CRON FIRST STARTED (priority=1)")
+        time.sleep(5)
+        _logger.info("ODOO19 CRON FIRST FINISHED")
+
+    def cron_second_task(self):
+        _logger.info("ODOO19 CRON SECOND STARTED (priority=1)")
+        time.sleep(5)
+        _logger.info("ODOO19 CRON SECOND FINISHED")
+         
 
 
     @api.ondelete(at_uninstall=False)
     def _prevent_delete_graduated(self):
-        raise UserError("OnDelete Hit")
         _logger.info("OnDelete method called")
         """ Prevent deleting students who have already graduated """
         for rec in self:
@@ -86,9 +181,10 @@ class MyModule(models.Model):
                 raise UserError(_("You cannot delete a student record once they have graduated!"))
 
 
-    @api.depends('gpa')
-    def _compute_grade(self):
+    @api.onchange('gpa')
+    def _on_change(self):
         """ Automatically calculate Grade whenever GPA changes """
+        _logger.info("Computing Grade for GPA: %s", self.gpa) 
         for rec in self:
             if rec.gpa >= 3.5:
                 rec.grade = 'Excellent'
@@ -96,13 +192,17 @@ class MyModule(models.Model):
                 rec.grade = 'Average'
             else:
                 rec.grade = 'Below Average' 
+        _logger.info("Grade set to: %s", rec.grade)              
 
     @api.onchange('stu_name', 'branch')
     def _onchange_student_details(self):
+        # import pdb;pdb.set_trace()
         """ Suggest a description live as the user types """
         if self.stu_name and self.branch:
             # This updates the screen immediately
             self.description = _("Student %s is enrolled in the %s branch.") % (self.stu_name, self.branch)
+
+      
                        
             
 

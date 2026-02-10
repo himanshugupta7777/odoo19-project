@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 1. The Form View for the Wizard -->
+    <record id="view_update_branch_wizard_form" model="ir.ui.view">
+        <field name="name">update.branch.wizard.form</field>
+        <field name="model">update.branch.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Update Branch">
+                <group>
+                    <field name="new_branch"/>
+                    <field name="student_ids" widget="many2many_tags" readonly="1"/>
+                </group>
+                <footer>
+                    <button name="action_apply" string="Update" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- 2. The Action to open the Wizard -->
+    <record id="action_update_branch_wizard" model="ir.actions.act_window">
+        <field name="name">Update Branch</field>
+        <field name="res_model">update.branch.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_student_info"/>
+        <field name="binding_view_types">list</field>
+    </record>
+</odoo>

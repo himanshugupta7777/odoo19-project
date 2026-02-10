@@ -11,6 +11,7 @@
                 <field name="branch"/>
                 <field name="roll_no"/>
                 <field name="gender"/> 
+                <field name="active" widget="boolean_toggle"/>
                 <field name="gpa"/>   
                 <field name="is_graduated" widget="boolean_toggle"/>
             </list>
@@ -24,6 +25,16 @@
         <field name="arch" type="xml">
             <form string="Student Details">
                 <sheet> 
+                <div class="oe_button_box" name="button_box">
+                <button name="action_archive" type="object" class="oe_stat_button" icon="fa-archive">
+                    <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                </button>
+                <button name="%(action_update_branch_wizard)d" 
+                string="Update Branch" 
+                type="action" 
+                class="oe_highlight"/>
+
+                </div>
                     <div class="oe_title">
                         <h1><field name="reference_no"/></h1>
                     </div>
@@ -35,6 +46,7 @@
                             <field name="branch"/>
                             <field name="roll_no"/>
                             <field name="dob"/>
+                            <field name="email"/>
                         </group>
                         <group>
                             <field name="gender"/>
@@ -60,6 +72,10 @@
                         </page>
                     </notebook>
                 </sheet>
+                <chatter>
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </chatter>
             </form>
         </field>
     </record>
@@ -94,11 +110,25 @@
         <field name="name">student.info.calendar</field>
         <field name="model">student.info</field>
         <field name="arch" type="xml">
-            <calendar string="Student Birthdays" date_start="dob" color="branch" mode="month">
+            <calendar string="Student Birthdays" date_start="birthday_this_year" color="branch" mode="month">
                 <field name="stu_name"/>
                 <field name="branch"/>
             </calendar> 
         </field>
+    </record>
+
+    <!-- search view -->
+    <record id="view_student_info_search" model="ir.ui.view">
+    <field name="name">student.info.search</field>
+    <field name="model">student.info</field>
+    <field name="arch" type="xml">
+        <search string="Search Students">
+            <field name="stu_name"/>
+            <field name="reference_no"/>
+            <!-- Ye filter archived records dekhne ke liye hai -->
+            <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+        </search>
+    </field>
     </record>
 
     <!-- Graph View -->

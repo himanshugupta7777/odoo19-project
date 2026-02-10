@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="cron_first_task" model="ir.cron">
+        <field name="name">Odoo19 Cron First</field>
+        <field name="model_id" ref="model_student_info"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_first_task()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">minutes</field>
+        <field name="priority">1</field>
+        <field name="active">True</field>
+    </record>
+
+    <record id="cron_second_task" model="ir.cron">
+        <field name="name">Odoo19 Cron Second</field>
+        <field name="model_id" ref="model_student_info"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_second_task()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">minutes</field>
+        <field name="priority">1</field>
+        <field name="active">True</field>
+    </record>
+
+</odoo>
