@@ -3,7 +3,7 @@
     'version': '19.0.1.0.1',
     'category': 'sales',
     'author': 'Himanshu',
-    'depends': ['base','mail'],
+    'depends': ['base','mail','sale','website'],
     'data': [
         'security/ir.model.access.csv',
         'security/security_groups.xml',
@@ -11,6 +11,9 @@
         'views/wizard_view.xml',
         'views/views.xml',
         'views/templates.xml',
+        'views/saleorder.xml',
+        'views/website.xml',
+        'views/website_view.xml',
         'data/student.info.csv',
         'data/student_category.xml',
         'data/birthday_email.xml',

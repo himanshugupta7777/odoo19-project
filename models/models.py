@@ -10,7 +10,7 @@ class StudentBase(models.AbstractModel):
     _name = 'student.base'
     _description = 'Shared Person Logic'
 
-    dob = fields.Datetime(string="Date and time of birth", required=True)
+    dob = fields.Datetime(string="Date and time of birth")
     birthday_this_year = fields.Date(
         string="Birthday(This Year)",
         compute="_compute_birthday_this_year",
@@ -48,7 +48,7 @@ class MyModule(models.Model):
     # dob = fields.Datetime(string="Date and time of birth", required=True)
     is_graduated = fields.Boolean(string="Graduated?")
     gpa = fields.Float( digits=(12, 2))
-    _order='gpa asc'
+    _order='reference_no desc'
     student_image=fields.Binary(string="Student Photo")
     grade = fields.Char(string="Grade",store=True)
     gender = fields.Selection([
@@ -67,10 +67,10 @@ class MyModule(models.Model):
     #     store=True
     # )
     email=fields.Char(string="Student Email")
-    _unique_email=models.Constraint(
-        'UNIQUE(email)',
-        'This email is already registered!'
-    )
+    # _unique_email=models.Constraint(
+    #     'UNIQUE(email)',
+    #     'This email is already registered!'
+    # )
 
     user_id = fields.Many2one(
     'res.users',
@@ -107,6 +107,30 @@ class MyModule(models.Model):
         return super(MyModule, self).create(vals_list)
 
 
+    @api.constrains('email')
+    def _check_unique_email(self):
+        for rec in self:
+            if rec.email:
+                existing = self.search([
+                    ('email', '=', rec.email),
+                    ('id', '!=', rec.id)
+                ], limit=1)
+                if existing:
+                    raise ValidationError("This email is already registered!")
+
+
+    @api.constrains('roll_no')
+    def _check_unique_roll_no(self):
+        for rec in self:
+            if rec.roll_no:
+                existing = self.search([
+                    ('roll_no', '=', rec.roll_no),
+                    ('id', '!=', rec.id)
+                ], limit=1)
+                if existing:
+                    raise ValidationError("This Roll Number is already assigned!")
+                
+
 
     @api.constrains('roll_no')
     def _check_roll_no(self):
@@ -118,7 +142,7 @@ class MyModule(models.Model):
     def _check_gpa(self):
         for rec in self:
             if rec.gpa<=0:
-                raise ValidationError(_("Gpa can't be negative!"))            
+                raise ValidationError(_("Gpa can't be negative or zero!"))            
 
     # @api.constrains('dob')
     # def _check_birth_date(self):
@@ -232,3 +256,34 @@ class MyModule(models.Model):
             return super(MyModule, self).unlink()
         
         return super(MyModule, self).unlink()
+
+
+
+
+# inherting sale order        
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'  # Use a string, not a list
+
+    student_id = fields.Many2one(
+        'student.info', 
+        string="Related Student",
+    )
+    student_display_name = fields.Char(
+        string="Student Name",
+        related="student_id.stu_name", 
+        readonly=True
+    )
+
+
+class Website(models.Model):
+    _inherit='website'
+
+    student_id = fields.Many2one(
+        'student.info', 
+        string="Related Student",
+    )
+    student_display_name = fields.Char(
+        string="Student Name",
+        related="student_id.stu_name", 
+        readonly=True
+    )
