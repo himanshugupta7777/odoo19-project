@@ -141,8 +141,9 @@ class MyModule(models.Model):
     @api.constrains('gpa')
     def _check_gpa(self):
         for rec in self:
-            if rec.gpa<=0:
-                raise ValidationError(_("Gpa can't be negative or zero!"))            
+            if rec.gpa and rec.gpa <= 0:
+                raise ValidationError(_("Gpa can't be negative or zero!"))
+           
 
     # @api.constrains('dob')
     # def _check_birth_date(self):
