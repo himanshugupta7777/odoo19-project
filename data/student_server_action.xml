@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="action_promote_student_server" model="ir.actions.server">
+            <field name="name">Promote Student</field>
+            <field name="model_id" ref="model_student_info"/>
+            <field name="binding_model_id" ref="model_student_info"/>
+            <!-- for displaying this action in action menu -->
+            <field name="state">code</field>
+            <field name="code">
+record.action_promote_student()
+            </field>
+        </record>
+
+    </data>
+</odoo>

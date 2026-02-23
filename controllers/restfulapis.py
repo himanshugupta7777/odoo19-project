@@ -101,3 +101,172 @@ class StudentAPI(http.Controller):
                 "message": str(e)
             }, status=422)
         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#without sudo
+
+
+
+# from odoo import http
+# from odoo.http import request
+# import json
+
+# class StudentAPI(http.Controller):
+
+#     # ===============================
+#     # GET ALL STUDENTS
+#     # ===============================
+#     @http.route('/api/students',
+#                 type='http',
+#                 auth='public',
+#                 methods=['GET'],
+#                 csrf=False,
+#                 website=False)
+#     def get_students(self):
+
+#         print("USER:", request.env.user.name)
+
+#         students = request.env['student.info'].search([])
+
+#         data = [{
+#             "id": s.id,
+#             "name": s.stu_name,
+#             "email": s.email,
+#             "gpa": s.gpa
+#         } for s in students]
+
+#         return request.make_json_response(data)
+
+
+#     # ===============================
+#     # CREATE STUDENT
+#     # ===============================
+#     @http.route('/api/student/create',
+#                 type='http',
+#                 auth='public',
+#                 methods=['POST'],
+#                 csrf=False,
+#                 website=False)
+#     def create_student(self, **kwargs):
+
+#         try:
+#             data = json.loads(request.httprequest.data or "{}")
+
+#             student = request.env['student.info'].create(data)
+
+#             return request.make_json_response({
+#                 "status": "success",
+#                 "id": student.id,
+#                 "name": student.display_name
+#             }, status=201)
+
+#         except Exception as e:
+#             return request.make_json_response({
+#                 "status": "error",
+#                 "message": str(e)
+#             }, status=422)
+
+
+#     # ===============================
+#     # UPDATE
+#     # ===============================
+#     @http.route('/api/student/<int:student_id>',
+#                 type='http',
+#                 auth='public',
+#                 methods=['PUT'],
+#                 csrf=False,
+#                 website=False)
+#     def update_student(self, student_id, **kwargs):
+
+#         try:
+#             data = json.loads(request.httprequest.data or "{}")
+
+#             student = request.env['student.info'].browse(student_id)
+
+#             if not student.exists():
+#                 return request.make_json_response({
+#                     "status": "error",
+#                     "message": "Student not found"
+#                 }, status=404)
+
+#             student.write(data)
+
+#             return request.make_json_response({
+#                 "status": "success",
+#                 "message": "Student updated successfully"
+#             })
+
+#         except Exception as e:
+#             return request.make_json_response({
+#                 "status": "error",
+#                 "message": str(e)
+#             }, status=422)
+
+
+#     # ===============================
+#     # DELETE
+#     # ===============================
+#     @http.route('/api/student/<int:student_id>',
+#                 type='http',
+#                 auth='public',
+#                 methods=['DELETE'],
+#                 csrf=False,
+#                 website=False)
+#     def delete_student(self, student_id, **kwargs):
+
+#         try:
+#             student = request.env['student.info'].browse(student_id)
+
+#             if not student.exists():
+#                 return request.make_json_response({
+#                     "status": "error",
+#                     "message": "Student not found"
+#                 }, status=404)
+
+#             student.unlink()
+
+#             return request.make_json_response({
+#                 "status": "success",
+#                 "message": "Student deleted successfully"
+#             })
+
+#         except Exception as e:
+#             return request.make_json_response({
+#                 "status": "error",
+#                 "message": str(e)
+#             }, status=422)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

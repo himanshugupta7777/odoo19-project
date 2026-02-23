@@ -24,6 +24,13 @@
         <field name="model">student.info</field> 
         <field name="arch" type="xml">
             <form string="Student Details">
+
+            <header>
+                <button name="%(action_promote_student_server)d"
+                        type="action"
+                        string="Promote Student"
+                        class="oe_highlight"/>
+            </header>
                 <sheet> 
                 <div class="oe_button_box" name="button_box">
                 <button name="action_archive" type="object" class="oe_stat_button" icon="fa-archive">

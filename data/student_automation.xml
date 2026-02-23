@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- SERVER ACTION -->
+        <record id="action_branch_scholarship" model="ir.actions.server">
+            <field name="name">Auto Scholarship Assign</field>
+            <field name="model_id" ref="model_student_info"/>
+            <field name="state">code</field>   
+            <!-- other options(object_create,object_write,email) -->
+            <field name="code">
+
+    record.write({
+        'scholarship_details': 'Eligible for Tech Scholarship'
+    })
+    record.message_post(
+        body="Scholarship assigned automatically because branch is Computer Science."
+    )
+            </field>
+        </record>
+
+        <!-- AUTOMATED ACTION -->
+        <record id="automation_branch_scholarship" model="base.automation">
+            <field name="name">Auto Scholarship on Branch Update</field>
+            <field name="model_id" ref="model_student_info"/>
+            <field name="trigger">on_write</field>
+
+            <!-- Only trigger when branch becomes Computer Science -->
+            <field name="filter_domain">
+                [('branch', '=', 'Computer Science')]
+            </field>
+
+            <field name="action_server_ids"
+                   eval="[(4, ref('action_branch_scholarship'))]"/>
+        </record>
+
+    </data>
+</odoo>

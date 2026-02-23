@@ -99,6 +99,25 @@ class MyModule(models.Model):
     string='Messages',
     readonly=True
     )
+
+
+
+
+
+
+
+    def action_promote_student(self):
+        for rec in self:
+            if rec.gpa and rec.gpa >= 7.5:
+                rec.write({
+                    'grade': 'Top Performer'
+                })
+                rec.message_post(
+                    body="Student promoted to Top Performer based on GPA."
+                )
+            else:
+                raise UserError("Student GPA must be 7.5 or higher to promote.")
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
@@ -288,3 +307,6 @@ class Website(models.Model):
         related="student_id.stu_name", 
         readonly=True
     )
+
+
+    

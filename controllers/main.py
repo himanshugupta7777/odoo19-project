@@ -7,7 +7,7 @@ import re
 class StudentController(http.Controller):
 
     # FORM DISPLAY
-    @http.route('/student-form', type='http', auth='public', website=True)
+    @http.route('/student-form', type='http', auth='public',website=True)
     def student_form(self, **kwargs):
 
         model = request.env['student.info']
